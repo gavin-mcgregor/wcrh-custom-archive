@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wcrh/custom-archive",
+	"version": "0.1.0",
+	"title": "Custom Archive",
+	"category": "custom-block",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "custom-archive",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
+}
