@@ -7,8 +7,27 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-wcrh-wcrh-custom-archive {
-  background-color: #21759b;
-  color: #fff;
-  padding: 2px;
+.wp-block-wcrh-custom-archive {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--wp--preset--spacing--10);
+}
+.wp-block-wcrh-custom-archive .image-container {
+  padding-bottom: 75%;
+  position: relative;
+}
+.wp-block-wcrh-custom-archive a {
+  text-decoration: none;
+}
+.wp-block-wcrh-custom-archive img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
 }
