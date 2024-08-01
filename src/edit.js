@@ -135,7 +135,7 @@ export default function Edit({ attributes, setAttributes }) {
 					<p
 						style={{ textAlign: "center", width: "100%", gridColumn: "span 2" }}
 					>
-						{__("Loading...")}
+						{__("There are no posts to display.")}
 					</p>
 				) : (
 					posts.map((post) => (

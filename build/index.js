@@ -178,7 +178,7 @@ function Edit({
       width: "100%",
       gridColumn: "span 2"
     }
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Loading...")) : posts.map(post => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("article", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("There are no posts to display.")) : posts.map(post => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("article", {
     key: post.id,
     className: `post-card`,
     style: {
