@@ -58,6 +58,12 @@ $query = new WP_Query($args);
 			</a>
 		<?php endwhile; ?>
 		<?php wp_reset_postdata(); ?>
+	<?php else : ?>
+		<div class="archive-error">
+			<p>
+				There are no posts to display.
+			</p>
+		</div>
 	<?php endif; ?>
 
 	<div class="pagination has-small-font-size">

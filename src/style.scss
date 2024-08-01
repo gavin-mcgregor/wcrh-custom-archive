@@ -9,6 +9,7 @@
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	gap: var(--wp--preset--spacing--10);
+	width: 100%;
 
 	.image-container {
 		padding-bottom: calc(3 / 4 * 100%);
@@ -59,10 +60,27 @@
 			height: 105%;
 		}
 	}
+
+	.archive-error {
+		grid-column: span 2;
+		text-align: center;
+	}
+}
+
+@media (max-width: 781px) {
+	.wp-block-wcrh-custom-archive {
+		.archive-error {
+			text-align: left;
+		}
+	}
 }
 
 @media (max-width: 420px) {
 	.wp-block-wcrh-custom-archive {
-		grid-template-columns: repeat(1, 1fr);
+		display: block;
+
+		.post-card {
+			margin-bottom: 1rem;
+		}
 	}
 }
