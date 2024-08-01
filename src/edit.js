@@ -15,6 +15,7 @@ import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
 import {
 	PanelBody,
 	RadioControl,
+	ColorPalette,
 	Flex,
 	FlexItem,
 	TextControl,
@@ -39,12 +40,14 @@ import "./editor.scss";
 
 import { useState, useEffect } from "@wordpress/element";
 import apiFetch from "@wordpress/api-fetch";
+import { useSelect } from "@wordpress/data";
 
 export default function Edit({ attributes, setAttributes }) {
-	const { posttype, numPosts } = attributes;
+	const { posttype, numPosts, color } = attributes;
 
 	const [posts, setPosts] = useState([]);
 
+	// Get Posts
 	useEffect(() => {
 		const validNumPosts = isNaN(numPosts) ? 4 : numPosts;
 		apiFetch({
@@ -55,6 +58,17 @@ export default function Edit({ attributes, setAttributes }) {
 		});
 	}, [posttype, numPosts]);
 
+	// Select & save the fill colour
+	const onChangeColor = (newColor) => {
+		setAttributes({ color: newColor });
+	};
+
+	// Fetch the colors from theme.json
+	const paletteColors = useSelect((select) => {
+		return select("core/editor").getEditorSettings().colors;
+	}, []);
+
+	// Abbrerviate Text
 	function abbreviateText(text, length) {
 		if (!text) return "";
 		const cleanText = text.replace(/<[^>]*>/g, "");
@@ -89,6 +103,29 @@ export default function Edit({ attributes, setAttributes }) {
 								value={numPosts || ""}
 								onChange={(value) => setAttributes({ numPosts: value })}
 							/>
+							<p>
+								The number of posts to display per page. If there are more posts
+								these will be displayed paginated.
+							</p>
+						</FlexItem>
+					</Flex>
+				</PanelBody>
+				<PanelBody title={__("Background Colour")}>
+					<Flex direction="column">
+						<FlexItem>
+							<p>
+								Choose the background colour for the posts to be shown within
+								the grid.
+							</p>
+							<ColorPalette
+								label={__("Background Colour")}
+								colors={paletteColors.map((color) => ({
+									name: color.name,
+									color: color.color,
+								}))}
+								value={color}
+								onChange={onChangeColor}
+							/>
 						</FlexItem>
 					</Flex>
 				</PanelBody>
@@ -101,8 +138,12 @@ export default function Edit({ attributes, setAttributes }) {
 						{__("Loading...")}
 					</p>
 				) : (
-					posts.map((post, index) => (
-						<article key={post.id} className={`blogpost`}>
+					posts.map((post) => (
+						<article
+							key={post.id}
+							className={`post-card`}
+							style={{ backgroundColor: `${color}` }}
+						>
 							{post._embedded["wp:featuredmedia"] && (
 								<div className="image-container">
 									<img
@@ -116,6 +157,9 @@ export default function Edit({ attributes, setAttributes }) {
 							)}
 							<div className="text-container">
 								<p>{abbreviateText(post.title.rendered, 37)}</p>
+								<p className="has-small-font-size">
+									{abbreviateText(post.excerpt.rendered, 120)}
+								</p>
 							</div>
 						</article>
 					))

@@ -16,6 +16,9 @@
     "numPosts": {
       "type": "string",
       "default": 4
+    },
+    "color": {
+      "type": "string"
     }
   },
   "example": {},

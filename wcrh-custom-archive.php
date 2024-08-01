@@ -30,3 +30,17 @@ function wcrh_custom_archive_block_init()
 	register_block_type(__DIR__ . '/build');
 }
 add_action('init', 'wcrh_custom_archive_block_init');
+
+// Trim String
+function trimStringToLength($string, $length)
+{
+	if ($length < 0) {
+		return '';
+	}
+
+	if (strlen($string) <= $length) {
+		return $string;
+	}
+
+	return substr($string, 0, $length - 3) . '...';
+}

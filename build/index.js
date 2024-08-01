@@ -49,6 +49,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
 /* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_7__);
 
 /**
  * Retrieves the translation of text.
@@ -85,15 +87,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 function Edit({
   attributes,
   setAttributes
 }) {
   const {
     posttype,
-    numPosts
+    numPosts,
+    color
   } = attributes;
   const [posts, setPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useState)([]);
+
+  // Get Posts
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_5__.useEffect)(() => {
     const validNumPosts = isNaN(numPosts) ? 4 : numPosts;
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_6___default()({
@@ -105,6 +111,20 @@ function Edit({
       setPosts(posts);
     });
   }, [posttype, numPosts]);
+
+  // Select & save the fill colour
+  const onChangeColor = newColor => {
+    setAttributes({
+      color: newColor
+    });
+  };
+
+  // Fetch the colors from theme.json
+  const paletteColors = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_7__.useSelect)(select => {
+    return select("core/editor").getEditorSettings().colors;
+  }, []);
+
+  // Abbrerviate Text
   function abbreviateText(text, length) {
     if (!text) return "";
     const cleanText = text.replace(/<[^>]*>/g, "");
@@ -138,6 +158,18 @@ function Edit({
     onChange: value => setAttributes({
       numPosts: value
     })
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "The number of posts to display per page. If there are more posts these will be displayed paginated.")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.PanelBody, {
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Background Colour")
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.Flex, {
+    direction: "column"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.FlexItem, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Choose the background colour for the posts to be shown within the grid."), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ColorPalette, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Background Colour"),
+    colors: paletteColors.map(color => ({
+      name: color.name,
+      color: color.color
+    })),
+    value: color,
+    onChange: onChangeColor
   }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__.useBlockProps)()
   }, posts.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
@@ -146,9 +178,12 @@ function Edit({
       width: "100%",
       gridColumn: "span 2"
     }
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Loading...")) : posts.map((post, index) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("article", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Loading...")) : posts.map(post => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("article", {
     key: post.id,
-    className: `blogpost`
+    className: `post-card`,
+    style: {
+      backgroundColor: `${color}`
+    }
   }, post._embedded["wp:featuredmedia"] && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "image-container"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("img", {
@@ -156,7 +191,9 @@ function Edit({
     alt: post._embedded["wp:featuredmedia"][0].alt_text
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "text-container"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, abbreviateText(post.title.rendered, 37)))))));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, abbreviateText(post.title.rendered, 37)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "has-small-font-size"
+  }, abbreviateText(post.excerpt.rendered, 120)))))));
 }
 
 /***/ }),
@@ -286,6 +323,16 @@ module.exports = window["wp"]["components"];
 
 /***/ }),
 
+/***/ "@wordpress/data":
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["data"];
+
+/***/ }),
+
 /***/ "@wordpress/element":
 /*!*********************************!*\
   !*** external ["wp","element"] ***!
@@ -312,7 +359,7 @@ module.exports = window["wp"]["i18n"];
   \************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"wcrh/custom-archive","version":"0.1.0","title":"Archive","category":"custom-block","attributes":{"posts":{"type":"array","default":[]},"posttype":{"type":"string"},"numPosts":{"type":"string","default":4}},"example":{},"supports":{"html":false},"textdomain":"custom-archive","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"wcrh/custom-archive","version":"0.1.0","title":"Archive","category":"custom-block","attributes":{"posts":{"type":"array","default":[]},"posttype":{"type":"string"},"numPosts":{"type":"string","default":4},"color":{"type":"string"}},"example":{},"supports":{"html":false},"textdomain":"custom-archive","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php"}');
 
 /***/ })
 

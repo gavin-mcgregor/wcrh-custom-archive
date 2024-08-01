@@ -13,6 +13,11 @@
 	.image-container {
 		padding-bottom: calc(3 / 4 * 100%);
 		position: relative;
+		overflow: hidden;
+	}
+
+	.text-container {
+		padding: 0 var(--wp--preset--spacing--10) var(--wp--preset--spacing--10);
 	}
 
 	a {
@@ -28,5 +33,36 @@
 		height: 100%;
 		object-fit: cover;
 		object-position: center;
+		transition:
+			width 0.3s ease-in,
+			height 0.3s ease-in;
+	}
+
+	.pagination {
+		grid-column: span 2;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		gap: 0.5rem;
+
+		span {
+			color: var(--wp--preset--color--base-2);
+			background-color: var(--wp--preset--color--contrast);
+			padding: 0.25rem 0.5rem;
+			border-radius: 1rem;
+		}
+	}
+
+	.post-card:hover {
+		img {
+			width: 105%;
+			height: 105%;
+		}
+	}
+}
+
+@media (max-width: 420px) {
+	.wp-block-wcrh-custom-archive {
+		grid-template-columns: repeat(1, 1fr);
 	}
 }
